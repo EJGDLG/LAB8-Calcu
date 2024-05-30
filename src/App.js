@@ -1,8 +1,8 @@
 // App.js
 import React, { useEffect, useRef } from 'react';
 import './index.css';
-import Display from './Display';
-import Calculadora from './Calculadora';
+import Display from './component/Display';
+import Calculadora from './component/Calculadora';
 
 function App() {
   const displayRef = useRef(null);

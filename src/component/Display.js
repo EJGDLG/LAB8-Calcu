@@ -1,11 +1,14 @@
-import './index.css';
 import Calculadora from './Calculadora';
+import Borrar from './Borrar';
+import Numeros from './Numeros';
 
 class Display {
     constructor(displayValorAnterior, displayValorActual) {
         this.displayValorActual = displayValorActual;
         this.displayValorAnterior = displayValorAnterior;
         this.calculador = new Calculadora();
+        this.borrar = new Borrar(this);
+        this.numeros = new Numeros(this);
         this.tipoOperacion = undefined;
         this.valorActual = '';
         this.valorAnterior = '';
@@ -17,18 +20,6 @@ class Display {
         };
     }
 
-    borrar() {
-        this.valorActual = this.valorActual.toString().slice(0, -1);
-        this.imprimirValores();
-    }
-
-    borrarTodo() {
-        this.valorActual = '';
-        this.valorAnterior = '';
-        this.tipoOperacion = undefined;
-        this.imprimirValores();
-    }
-
     computar(tipo) {
         if (this.tipoOperacion !== 'igual') {
             this.calcular();
@@ -36,32 +27,7 @@ class Display {
         this.tipoOperacion = tipo;
         this.valorAnterior = this.valorActual || this.valorAnterior;
         this.valorActual = '';
-        this.imprimirValores();
-    }
-
-    agregarNumero(numero) {
-        if (numero === '.' && this.valorActual.includes('.')) return;
-        if (this.valorActual.includes('.') && this.valorActual.split('.')[1].length >= 1) return; // Permitir solo un punto decimal
-        if (this.valorActual.replace('.', '').length >= 9) return; // Limitar a 9 caracteres excluyendo el punto decimal
-        this.valorActual = this.valorActual.toString() + numero.toString();
-        this.imprimirValores();
-    }
-
-    imprimirValores() {
-        if (this.valorActual.length > 9) {
-            this.valorActual = 'ERROR';
-        }
-
-        this.displayValorActual.textContent = this.valorActual;
-
-        if (this.valorActual === 'ERROR') {
-            this.displayValorAnterior.textContent = '';
-        } else if (this.tipoOperacion === 'restar' && parseFloat(this.valorActual) < 0) {
-            this.displayValorActual.textContent = 'ERROR';
-            this.displayValorAnterior.textContent = '';
-        } else {
-            this.displayValorAnterior.textContent = `${this.valorAnterior} ${this.signos[this.tipoOperacion] || ''}`;
-        }
+        this.numeros.imprimirValores();
     }
 
     calcular() {
